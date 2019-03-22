@@ -1,105 +1,108 @@
-//Binary search tree
-#include<iostream>
+#include <iostream>
+
 using namespace std;
 
-//The node class
-class Node{
-	public:
-	int data;
-	Node* l = NULL;
-	Node* r = NULL;
-	
-	//Constructor
-	Node(int val){
-		data = val;
-	}
+class Node
+{
+    public:
+    int data;
+    Node *leftChild;
+    Node *rightChild;
+
+    Node(int value)
+    {
+        data = value;
+        leftChild = NULL;
+        rightChild = NULL;
+    }
 };
 
-//The tree class
-class BST{
-	public:
-	Node* root;
-	//Constructor
-	BST(){
-		root = NULL;
-	}
-
-	//The functionssssssss......
-	//Insert
-	void insert(int value){
-		//If tree is null insert and leave
-		if(root==NULL){
-			root = new Node(value);
-			return;
-		}
-		insertHelper(root, value);
-	}
-
-	void insertHelper(Node* curr, int value){
-		//move accordingly (but check before moving)
-		if(curr->data > value){
-			//If the next position is NULL, insert
-			if(curr->l==NULL){
-				curr->l = new Node(value);
-				return;
-			}
-			//else go for recursion
-			else{insertHelper(curr->l, value);}
-		}
-		else{
-			//If the next position is NULL, insert
-			if(curr->r==NULL){
-				curr->r = new Node(value);
-				return;
-			}
-			//else go for recursion
-		 	else {insertHelper(curr->r, value);}
-		}
-		
-	}
-
-	void display(){
-		display2(root);
-		cout<<"\b "<<endl;
-	}
-	
-	//This is inorder display...
-	void display2(Node* curr){
-		//Base condition
-		if(curr == NULL){return;}
-		//display left
-		display2(curr->l);
-		//display current
-		cout << curr->data << ",";
-		//display right
-		display2(curr->r);
-	}
+class BST
+{
+    public:
+    Node* root;
 
 
+    BST()
+    {
+        root=NULL;
+    }
 
+    void insert(int value)
+    {
+        insert_recursion(value,&root);
+    }
+    void insert_recursion(int value,Node  **curr)
+    {
+        Node* temp = new Node(value);
+        // cout << temp->data;
+        if(*curr == NULL)
+        {
+            *curr = temp;
+        }
+        else
+        {
+            if(value < (*curr)->data)
+            insert_recursion(value,&((*curr)->leftChild));
 
-	//Search
-	Node* search(int val){
-		return search2(val, root);
-	}
+            if(value >= (*curr)->data)
+            insert_recursion(value,&((*curr)->rightChild));
+        }
+        
+    }
 
-	Node* search2(int val,Node* curr){
-		//If tree is empty or reached the end of tree or value found
-		if(curr == NULL || curr->data == val){return curr;}
-		else if(curr->data > val){return search2(val, curr->l);}
-		else{return search2(val, curr->r);}
+    void display()
+    {
+        display_recursion(root);
+    }
+    void display_recursion(Node* curr )
+    {
+        if (curr != NULL) 
+        {
+            display_recursion(curr->leftChild);
+            cout << curr-> data << " : ";
+            display_recursion(curr->rightChild);
+        }
+        
+    }
 
-	}
+    Node* search(int value)
+    {
+        return search_recursion(value,root);
+    }
 
+    Node* search_recursion(int value,Node* curr)
+    {
+        if(curr == NULL)
+        return NULL;
+        else if(curr->data == value)
+        return curr;
+        else if(curr -> data > value)
+        search_recursion(value,curr->leftChild);
+        else if(curr -> data < value)
+        search_recursion(value,curr->rightChild);
+
+    } 
+    
 };
-int main(){
-	BST b1;
-	b1.insert(3);
-	b1.insert(4);
-	b1.insert(2);
-	b1.display();
-	Node* find = b1.search(2);
+int main()
+{
+    BST s1;
+    s1.insert(5);
+    s1.insert(10);
+    s1.insert(4);
+    s1.insert(25);
+    s1.insert(23);        
+    s1.insert(15);
+    s1.insert(12);
+    s1.insert(0);
+    s1.insert(3);
+    // cout << s1.root->data;
+    s1.display();
+    cout<<endl;
+
+    Node* find = s1.search(10);
 	if (find!=NULL){cout << find->data << endl;}
 	else{cout << "The number is not there in the tree" << endl;} 
-return 0;
+
 }
