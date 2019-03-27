@@ -53,14 +53,14 @@ class BST
 
     void display()
     {
-        display_recursion(root);
+         display_recursion(root);
     }
     void display_recursion(Node* curr )
     {
         if (curr != NULL) 
         {
             display_recursion(curr->leftChild);
-            cout << curr-> data << " : ";
+            cout << curr-> data << " , "<< curr << endl;
             display_recursion(curr->rightChild);
         }
         
@@ -93,16 +93,39 @@ class BST
             else
             return curr;
         }
+        else
+        {
+        
+            return NULL;
+        }
+        
     }
 
     Node* replace_At_Parent(Node **A, Node *B)
     {
-        B->leftChild= (*A)->leftChild;
-        B->rightChild = (*A)->rightChild;
-        Node* temp = *A;
-        *A = B;
-
-        return temp;
+        
+        cout << "*A is : " << *A <<"  B is : "<< B << endl;
+        if (B != NULL)
+        {
+            B->leftChild= (*A)->leftChild;
+            B->rightChild = (*A)->rightChild;
+            Node* temp = *A;
+            *A = B;
+            temp->leftChild=NULL;
+            temp->rightChild=NULL;
+    
+           return temp;
+        }
+        else
+        {
+            Node* temp = *A;
+            *A = B;
+            temp->leftChild=NULL;
+            temp->rightChild=NULL;
+    
+           return temp;
+        }
+        
     }
 
     void deleteNode(int value)
@@ -111,31 +134,40 @@ class BST
 
         if(*temp!=NULL)
         {
-            
+            delete_recursion(temp);
+
+
         }
-
-
+        else
+        {
+            cout<<" The given element is not present /n";
+        }
+        
 
     }
     Node* delete_recursion(Node **curr)
     {
-        cout<<"checkpoint 1"<< (*curr)->data << endl;
-        Node* temp = *curr;
-        if((*curr)->rightChild == NULL)
+        if(curr != NULL)
         {
-            if((*curr)->leftChild != NULL)
-            *curr = (*curr)->leftChild;
+            Node* temp = *curr;
+            
+            if((*curr) == NULL)
+            {
+            //    *curr = (*curr)->leftChild;
+            
+               return NULL;
+            }
             else
             {
-                *curr==NULL;
+                return replace_At_Parent(curr,delete_recursion(find_min(&((*curr)->rightChild))));
             }
-            
         }
         else
         {
-            return replace_At_Parent(curr,delete_recursion(find_min(&((*curr)->rightChild))));
-        }
         
+            return NULL;
+        }
+            
         
 
     }
@@ -144,14 +176,14 @@ int main()
 {
     BST s1;
     s1.insert(5);
+    s1.insert(8);
+    s1.insert(9);
     s1.insert(10);
-    s1.insert(4);
-    s1.insert(25);
-    s1.insert(23);        
-    s1.insert(15);
+    s1.insert(7);        
+    s1.insert(6);
+    s1.insert(11);
     s1.insert(12);
-    s1.insert(0);
-    s1.insert(3);
+    s1.insert(14);
     // cout << s1.root->data;
     s1.display();
     cout<<endl;
@@ -160,13 +192,16 @@ int main()
 	if (find!=NULL){cout << find->data << endl;}
 	else{cout << "The number is not there in the tree" << endl;} 
 
-    Node* temp= new Node(9);
-     s1.delete_recursion(s1.search_recursion(10,&(s1.root)));
+// cout << " \n dilition bigan \n";
+//     Node* temp= new Node(9);
+//      s1.delete_recursion(s1.search_recursion(8,&(s1.root)));
 
-cout<<endl;
-    // s1.display();
+s1.deleteNode(9);
+
+cout<< " \n delation end \n";
+    s1.display();
 
 
 cout <<endl;
-     cout<<(*s1.find_min(&(find->rightChild)))->data;
+//      cout<<(*s1.find_min(&(find->rightChild)))->data;
 }
